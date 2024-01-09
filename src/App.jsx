@@ -6,8 +6,6 @@ import { useControls } from 'leva'
 
 export default function App() {
   const { position } = useControls({ position: - 2 })
-
-    console.log(position)
   const cube = useRef()
 
   useFrame((state, delta) => {

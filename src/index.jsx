@@ -7,7 +7,14 @@ import { Loader } from '@react-three/drei'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Canvas>
+    <Canvas
+      shadows
+      camera={{
+        fov: 45,
+        near: 0.1,
+        far: 200,
+        position: [- 20, 10, 20]
+      }}>
       <Suspense>
         <App />
       </Suspense>

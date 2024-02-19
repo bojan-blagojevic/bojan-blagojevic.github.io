@@ -1,25 +1,35 @@
 import React, { Suspense, useRef } from 'react'
 import { OrbitControls, Stage } from '@react-three/drei'
-import { Model } from './Model'
+import { useThree } from '@react-three/fiber'
 import { Perf } from 'r3f-perf'
-import { useControls } from 'leva'
-import Placeholder from './Placeholder'
+import Cube from './Cube.jsx'
 
-export default function App() {
+export default function App({ domCanvas }) {
 
-  const { position } = useControls({ position: - 2 })
+  
 
-
-  const eventHandler = () => {
-    cube.current.material.color.set(`hsl(${Math.random() * 360}, 100%, 75%`)
-  }
+  const {gl} = useThree()
+  console.log(gl)
+  
   const ref = useRef()
   return <>
 
-    <OrbitControls makeDefault />
-    <Stage controls={ref} preset="rembrandt" intensity={1} environment="city">
+    <OrbitControls
+      makeDefault
+      domElement={gl.domElement}
+      enablePan={false}
+      enableZoom={true}
+      onClick={() => { console.log('onPointerDown!') }}
+      onPointerDown={() => { console.log('onPointerDown!') }}
+    />
+    <Stage
+      controls={ref}
+      preset="rembrandt"
+      intensity={1}
+      environment="city">
       <Perf position="top-left" />
-      <Model />
+      {/* <Placeholder/> */}
+      <Cube />
     </Stage>
   </>
 

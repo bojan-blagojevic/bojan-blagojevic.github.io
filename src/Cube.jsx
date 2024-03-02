@@ -4,8 +4,9 @@ import { Cubie } from "./Cubie";
 export default function Cube() {
 
     const eventHandler = (event) => {
-        //console.log(event)
-        //console.log(cubies)
+        console.log(event)
+        console.log(cubieState)
+        console.log(cubieState.get("x-1"))
         event.stopPropagation()
     }
 
@@ -23,19 +24,29 @@ export default function Cube() {
         }
     })
 
+    function addValue(m, k, v) {
+        m.set(k, [...(m.get(k) || []), v]);
+    }
+
     const cubies = []
+    const cubieState = new Map()
+    // -1
     for (let x = -1; x <= 1; x++) {
         for (let y = -1; y <= 1; y++) {
             for (let z = -1; z <= 1; z++) {
-                cubies.push(
-                    <Cubie
-                        x={x}
-                        y={y}
-                        z={z}
-                        rotation={rotation}
-                        key={"" + x + y + z}
-                        onCubieClicked={ eventHandler }
-                    />);
+                const k = "" + x + y + z
+                const c = <Cubie
+                    x={x}
+                    y={y}
+                    z={z}
+                    rotation={rotation}
+                    key={k}
+                    onCubieClicked={eventHandler}
+                />
+                addValue(cubieState, "x" + x, c)
+                addValue(cubieState, "y" + y, c)
+                addValue(cubieState, "z" + z, c)
+                cubies.push(c);
             }
         }
     }

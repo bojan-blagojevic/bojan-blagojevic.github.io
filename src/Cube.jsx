@@ -1,12 +1,37 @@
+import React, { useState } from "react";
 import { useControls } from "leva";
 import { Cubie } from "./Cubie";
 
 export default function Cube() {
 
-    const eventHandler = (event) => {
-        console.log(event)
-        console.log(cubieState)
-        console.log(cubieState.get("x-1"))
+    const [cubieStates, setCubieStates] = useState(() => {
+        const initialState = init();
+        return initialState;
+    });
+
+    function init() {
+        const cs = [];
+        for (let index = 0; index < 27; ++index) {
+            cs.push({
+                id: index,
+                selected: false
+            });
+        }
+        return cs;
+    }
+
+    function handleClick(event, i) {
+        const nextCubies = cubieStates.map(cubie => {
+            if (cubie.id === i) {
+                return { 
+                    id: cubie.id,
+                    selected: !cubie.selected
+                }
+            } else {
+                return cubie;
+            }
+        })
+        setCubieStates(nextCubies);
         event.stopPropagation()
     }
 
@@ -24,28 +49,23 @@ export default function Cube() {
         }
     })
 
-    function addValue(m, k, v) {
-        m.set(k, [...(m.get(k) || []), v]);
-    }
-
     const cubies = []
-    const cubieState = new Map()
-    // -1
+    let i = 0
     for (let x = -1; x <= 1; x++) {
         for (let y = -1; y <= 1; y++) {
             for (let z = -1; z <= 1; z++) {
                 const k = "" + x + y + z
+                const ii = i++
+                console.log("Draw cubie:" + ii + " sel:" + cubieStates[ii].selected)
                 const c = <Cubie
                     x={x}
                     y={y}
                     z={z}
                     rotation={rotation}
-                    key={k}
-                    onCubieClicked={eventHandler}
+                    key={ii}
+                    onCubieClicked={(event) => handleClick(event, ii)}
+                    selected={cubieStates[ii].selected}
                 />
-                addValue(cubieState, "x" + x, c)
-                addValue(cubieState, "y" + y, c)
-                addValue(cubieState, "z" + z, c)
                 cubies.push(c);
             }
         }

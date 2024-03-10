@@ -12,17 +12,14 @@ export function Cubie(
     y = 0,
     z = 0,
     rotation,
-    k,
-    onCubieClicked
+    onCubieClicked,
+    selected
   }) {
-    
-  const key = k
   const { nodes, materials } = useGLTF("/cubie.glb");
 
-  const [selected, setSelected] = useState(false);
   const [startRotating, setStartRotating] = useState(false);
   const [rotationX, setRotationX] = useState(0);
-  
+
   const { scale } = useSpring({
     scale: selected ? 1.1 : 1,
     config: config.wobbly
@@ -65,12 +62,7 @@ export function Cubie(
       onPointerUp={pointerUpEventHandler}
       onPointerDown={pointerDownEventHandler}
       onPointerLeave={pointerLeaveEventHandler}
-      onClick=//{onCubieClicked}
-      {(event) => {
-        setSelected(!selected)
-        event.stopPropagation()
-      }
-      }
+      onClick={onCubieClicked}
       rotation-x={rot}
       rotation-y={rotation.y}
       rotation-z={rotation.z}

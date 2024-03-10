@@ -21,7 +21,6 @@ export default function App() {
       intensity={1}
       environment="city">
       <Perf position="top-left" />
-      {/* <Placeholder/> */}
       <Cube />
     </Stage>
   </>

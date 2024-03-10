@@ -10,18 +10,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Leva/>
     <Canvas
-      // onPointerDown={(event) => {
-      //   console.log('---')
-      //   console.log('X', event.clientX) 
-      //   console.log('Y', event.clientY) 
-      // }}
-      // onPointerUp={() => { console.log('Up!') }}
       shadows
       camera={{
         fov: 45,
         near: 0.1,
         far: 200,
-        position: [- 20, 10, 20]
+        position: [ 10, 5, 10]
       }}>
       <Suspense>
         <App />

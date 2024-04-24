@@ -6,12 +6,13 @@ import React, { useRef, useState } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useSpring, animated, config } from '@react-spring/three'
 
-export function Cubie(
+export default function Cubie(
   {
     x = 0,
     y = 0,
     z = 0,
     rotation,
+    id,
     onCubieClicked,
     selected
   }) {
@@ -31,38 +32,41 @@ export function Cubie(
   })
 
   const pointerDownEventHandler = (event) => {
+    event.stopPropagation()
     if (selected === true) {
       console.log("Pointer down");
       setStartRotating(true);
-      event.stopPropagation()
     }
   }
 
   const pointerLeaveEventHandler = (event) => {
+    event.stopPropagation()
     if (selected === true) {
       console.log("Pointer leave");
       if (startRotating) {
         setRotationX(rotationX + Math.PI / 2)
         setStartRotating(false);
       };
-      event.stopPropagation()
     }
   }
 
   const pointerUpEventHandler = (event) => {
+    event.stopPropagation()
     if (selected === true) {
       setStartRotating(false);
-      event.stopPropagation()
     }
   }
-
+  //console.log("Draw cubie:" + id + " sel:" + selected)
   return (
     <animated.mesh
       scale={scale}
       onPointerUp={pointerUpEventHandler}
       onPointerDown={pointerDownEventHandler}
       onPointerLeave={pointerLeaveEventHandler}
-      onClick={onCubieClicked}
+      onClick={e => {
+        e.stopPropagation();
+        onCubieClicked();
+      }}
       rotation-x={rot}
       rotation-y={rotation.y}
       rotation-z={rotation.z}

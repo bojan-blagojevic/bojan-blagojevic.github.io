@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useControls } from "leva";
-import { Cubie } from "./Cubie";
+import Cubie from "./Cubie";
+import { Html } from "@react-three/drei";
 
 export default function Cube() {
 
@@ -11,11 +12,20 @@ export default function Cube() {
 
     function init() {
         const cs = [];
-        for (let index = 0; index < 27; ++index) {
-            cs.push({
-                id: index,
-                selected: false
-            });
+        let i = 0;
+        for (let x = -1; x <= 1; x++) {
+            for (let y = -1; y <= 1; y++) {
+                for (let z = -1; z <= 1; z++) {
+                    cs.push({
+                        id: i++,
+                        selected: false,
+                        x: x,
+                        y: y,
+                        z: z,
+                        rotation: 0
+                    });
+                }
+            }
         }
         return cs;
     }
@@ -23,16 +33,20 @@ export default function Cube() {
     function handleClick(event, i) {
         const nextCubies = cubieStates.map(cubie => {
             if (cubie.id === i) {
-                return { 
+                console.log("Cubie:" + cubie.id + " sel:" + !cubie.selected)
+                return {
                     id: cubie.id,
-                    selected: !cubie.selected
+                    selected: !cubie.selected,
+                    x: cubie.x,
+                    y: cubie.y,
+                    z: cubie.z,
+                    rotation: cubie.rotation
                 }
             } else {
                 return cubie;
             }
         })
         setCubieStates(nextCubies);
-        event.stopPropagation()
     }
 
 
@@ -49,30 +63,27 @@ export default function Cube() {
         }
     })
 
-    const cubies = []
-    let i = 0
-    for (let x = -1; x <= 1; x++) {
-        for (let y = -1; y <= 1; y++) {
-            for (let z = -1; z <= 1; z++) {
-                const k = "" + x + y + z
-                const ii = i++
-                console.log("Draw cubie:" + ii + " sel:" + cubieStates[ii].selected)
-                const c = <Cubie
-                    x={x}
-                    y={y}
-                    z={z}
-                    rotation={rotation}
-                    key={ii}
-                    onCubieClicked={(event) => handleClick(event, ii)}
-                    selected={cubieStates[ii].selected}
-                />
-                cubies.push(c);
-            }
-        }
-    }
+    
+    
+
+
 
     return <group dispose={null}>
-        {cubies}
+        {Object.values(cubieStates).map((cubie) => (
+            <Cubie
+                x={cubie.x}
+                y={cubie.y}
+                z={cubie.z}
+                rotation={cubie.rotation}
+                id = {cubie.id}
+                key={cubie.id}
+                onCubieClicked={(event) => handleClick(event, cubie.id)}
+                selected={cubie.selected}
+            />
+        ))}
+        <Html>
+            <button onClick={() => console.log('front')}>Rotate Front</button>
+        </Html>
     </group>
 
 }

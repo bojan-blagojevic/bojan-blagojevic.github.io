@@ -19,10 +19,17 @@ export default function Cube() {
                     cs.push({
                         id: i++,
                         selected: false,
+                        pos: {
+                            x: x,
+                            y: y,
+                            z: z
+                        },
                         x: x,
                         y: y,
                         z: z,
-                        rotation: 0
+                        rx: 0,
+                        ry: 0,
+                        rz: 0
                     });
                 }
             }
@@ -35,12 +42,8 @@ export default function Cube() {
             if (cubie.id === i) {
                 console.log("Cubie:" + cubie.id + " sel:" + !cubie.selected)
                 return {
-                    id: cubie.id,
-                    selected: !cubie.selected,
-                    x: cubie.x,
-                    y: cubie.y,
-                    z: cubie.z,
-                    rotation: cubie.rotation
+                    ...cubie,
+                    selected: !cubie.selected
                 }
             } else {
                 return cubie;
@@ -63,8 +66,37 @@ export default function Cube() {
         }
     })
 
-    
-    
+    const rotateFace = (face) => {
+        console.log("Rotating...")
+        const rotatedCubies = cubieStates.map((cubie) => {
+            if (face === 'front' && cubie.pos.x === 1) {
+                return {
+                    ...cubie,
+                    rx: (cubie.rx + Math.PI / 2),
+                };
+            }
+            if (face === 'back' && cubie.pos.x === -1) {
+                return { ...cubie, rx: (cubie.rx + Math.PI / 2) };
+            }
+            if (face === 'top' && cubie.pos.y === 1) {
+                return { ...cubie, ry: (cubie.ry + Math.PI / 2) };
+            }
+            if (face === 'bottom' && cubie.pos.y === -1) {
+                return { ...cubie, ry: (cubie.ry + Math.PI / 2) };
+            }
+            if (face === 'left' && cubie.pos.z === 1) {
+                return { ...cubie, rz: (cubie.rz + Math.PI / 2) };
+            }
+            if (face === 'right' && cubie.pos.z === -1) {
+                return { ...cubie, rz: (cubie.rz + Math.PI / 2) };
+            }
+            return cubie;
+        });
+        console.log(rotatedCubies)
+
+        setCubieStates(rotatedCubies);
+    };
+
 
 
 
@@ -74,15 +106,22 @@ export default function Cube() {
                 x={cubie.x}
                 y={cubie.y}
                 z={cubie.z}
-                rotation={cubie.rotation}
-                id = {cubie.id}
+                rx={cubie.rx}
+                ry={cubie.ry}
+                rz={cubie.rz}
+                id={cubie.id}
                 key={cubie.id}
                 onCubieClicked={(event) => handleClick(event, cubie.id)}
                 selected={cubie.selected}
             />
         ))}
         <Html>
-            <button onClick={() => console.log('front')}>Rotate Front</button>
+            <button onClick={() => rotateFace('front')}>Rotate Front</button>
+            <button onClick={() => rotateFace('back')}>Rotate Back</button>
+            <button onClick={() => rotateFace('top')}>Rotate Top</button>
+            <button onClick={() => rotateFace('bottom')}>Rotate Bottom</button>
+            <button onClick={() => rotateFace('left')}>Rotate Left</button>
+            <button onClick={() => rotateFace('right')}>Rotate Right</button>
         </Html>
     </group>
 

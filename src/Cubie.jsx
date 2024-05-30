@@ -11,65 +11,38 @@ export default function Cubie(
     x = 0,
     y = 0,
     z = 0,
-    rotation,
+    rx = 0,
+    ry = 0,
+    rz = 0,
     id,
     onCubieClicked,
     selected
   }) {
   const { nodes, materials } = useGLTF("/cubie.glb");
 
-  const [startRotating, setStartRotating] = useState(false);
-  const [rotationX, setRotationX] = useState(0);
-
   const { scale } = useSpring({
     scale: selected ? 1.1 : 1,
     config: config.wobbly
   })
 
-  const { rot } = useSpring({
-    rot: rotationX,
+  const { rotX, rotY, rotZ } = useSpring({
+    rotX: rx,
+    rotY: ry,
+    rotZ: rz,
     config: config.wobbly
   })
 
-  const pointerDownEventHandler = (event) => {
-    event.stopPropagation()
-    if (selected === true) {
-      console.log("Pointer down");
-      setStartRotating(true);
-    }
-  }
-
-  const pointerLeaveEventHandler = (event) => {
-    event.stopPropagation()
-    if (selected === true) {
-      console.log("Pointer leave");
-      if (startRotating) {
-        setRotationX(rotationX + Math.PI / 2)
-        setStartRotating(false);
-      };
-    }
-  }
-
-  const pointerUpEventHandler = (event) => {
-    event.stopPropagation()
-    if (selected === true) {
-      setStartRotating(false);
-    }
-  }
   //console.log("Draw cubie:" + id + " sel:" + selected)
   return (
     <animated.mesh
       scale={scale}
-      onPointerUp={pointerUpEventHandler}
-      onPointerDown={pointerDownEventHandler}
-      onPointerLeave={pointerLeaveEventHandler}
       onClick={e => {
         e.stopPropagation();
         onCubieClicked();
       }}
-      rotation-x={rot}
-      rotation-y={rotation.y}
-      rotation-z={rotation.z}
+      rotation-x={rotX}
+      rotation-y={rotY}
+      rotation-z={rotZ}
       castShadow
       receiveShadow
     >
